@@ -1,15 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
-const app = express();
+const AuthRoute = require("./routes/auth");
+const UserRoute = require("./routes/user");
 
 const dbUser = process.env.DB_USER;
 const dbPass = process.env.DB_PASS;
-
-console.log(dbPass, dbUser);
+const PORT = process.env.PORT || 3200;
 
 mongoose
   .connect(
@@ -20,9 +18,11 @@ mongoose
   })
   .catch((err) => console.log(err));
 
-app.listen(3200);
+const app = express();
 
-// Open Route - Public Route
-app.get("/", (req, res) => {
-  res.status(200).json({ msg: "Bem vindo a nossa API!" });
-});
+app.use(express.json());
+
+app.listen(PORT);
+
+app.use("/auth", AuthRoute);
+app.use("/user", UserRoute);
