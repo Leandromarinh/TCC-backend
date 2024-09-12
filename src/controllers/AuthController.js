@@ -37,7 +37,7 @@ async function login(req, res) {
 
   const user = await User.findOne({ email: email });
 
-  if (!user) return res.status(404).json({ msg: "Usuário não encontrado!" });
+  if (!user) return res.status(404).json({ msg: "Email não encontrado!" });
 
   const checkPassword = await bcrypt.compare(password, user.password);
 
@@ -49,7 +49,7 @@ async function login(req, res) {
         id: user._id,
       },
       secret,
-      { expiresIn: "30s" }
+      { expiresIn: "2h" }
     );
 
     const refresh_token = jwt.sign(
@@ -57,13 +57,18 @@ async function login(req, res) {
         id: user._id,
       },
       refreshTokenSecret,
-      { expiresIn: "24h" }
+      { expiresIn: "48h" }
     );
 
+    const tokenExpirationTime = Math.floor(Date.now() / 1000) + 7200;
+
+    const userInfo = await User.findById(user._id, "-password");
+
     res.status(200).json({
-      msg: "Autenticação realizada com sucesso!",
+      user: userInfo,
       token,
       refresh_token,
+      token_expiry_time: tokenExpirationTime,
     });
   } catch (error) {
     console.log(error);
@@ -74,6 +79,8 @@ async function login(req, res) {
 const refreshToken = (req, res) => {
   const refresh_token = req.body.refresh_token;
 
+  const tokenExpirationTime = Math.floor(Date.now() / 1000) + 7200;
+
   jwt.verify(refresh_token, refreshTokenSecret, function (error, decode) {
     if (error) res.status(400).json({ error });
     else {
@@ -82,12 +89,20 @@ const refreshToken = (req, res) => {
           id: decode._id,
         },
         secret,
-        { expiresIn: "30s" }
+        { expiresIn: "2h" }
+      );
+      const newRefreshToken = jwt.sign(
+        {
+          id: decode._id,
+        },
+        refreshTokenSecret,
+        { expiresIn: "48h" }
       );
       res.status(200).json({
         msg: "Token refreshed com sucesso!",
         token,
-        refresh_token,
+        refresh_token: newRefreshToken,
+        token_expiry_time: tokenExpirationTime,
       });
     }
   });
