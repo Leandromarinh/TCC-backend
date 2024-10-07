@@ -3,6 +3,8 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const subject = require("../subjects");
+
 const secret = process.env.SECRET;
 const refreshTokenSecret = process.env.REFRESH_SECRET;
 
@@ -10,6 +12,8 @@ async function register(req, res) {
   const { name, email, password, period } = req.body;
 
   const UserExists = await User.findOne({ email: email });
+
+  // console.log("subjects:", subjects);
 
   if (UserExists) return res.status(422).json({ msg: "Email já cadastrado" });
 
@@ -21,6 +25,7 @@ async function register(req, res) {
     email,
     password: passwordHash,
     period,
+    subject,
   });
 
   try {
@@ -62,10 +67,11 @@ async function login(req, res) {
 
     const tokenExpirationTime = Math.floor(Date.now() / 1000) + 7200;
 
-    const userInfo = await User.findById(user._id, "-password");
+    // const userInfo = await User.findById(user._id, "-password");
 
     res.status(200).json({
-      user: userInfo,
+      id: user._id,
+      // user: userInfo,
       token,
       refresh_token,
       token_expiry_time: tokenExpirationTime,
