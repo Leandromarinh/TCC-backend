@@ -70,4 +70,35 @@ async function updatePassword(req, res) {
   }
 }
 
-module.exports = { getUser, updateUser, updatePassword };
+async function updateSubject(req, res) {
+  const { id, period, subjectId } = req.params;
+
+  const newSubject = req.body;
+
+  try {
+    const user = await User.findOne({
+      _id: id,
+      "subject.period": period,
+      "subject.subjects._id": subjectId,
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado" });
+    }
+
+    const subjectPeriod = user.subject.find((s) => s.period === period);
+    const subject = subjectPeriod.subjects.id(subjectId);
+
+    Object.assign(subject, newSubject);
+
+    subject._id = subjectId;
+
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Error updating subject" });
+  }
+}
+
+module.exports = { getUser, updateUser, updatePassword, updateSubject };
