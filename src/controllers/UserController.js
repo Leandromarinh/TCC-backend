@@ -90,8 +90,17 @@ async function updateSubject(req, res) {
     const subject = subjectPeriod.subjects.id(subjectId);
 
     Object.assign(subject, newSubject);
-
     subject._id = subjectId;
+
+    user.myGrid.forEach((gridPeriod) => {
+      const gridSubject = gridPeriod.subjects.find(
+        (s) => s._id.toString() === subjectId
+      );
+      if (gridSubject) {
+        Object.assign(gridSubject, newSubject);
+        gridSubject._id = subjectId;
+      }
+    });
 
     await user.save();
 
@@ -101,4 +110,41 @@ async function updateSubject(req, res) {
   }
 }
 
-module.exports = { getUser, updateUser, updatePassword, updateSubject };
+async function updateMyGrid(req, res) {
+  const { id } = req.params;
+  const { gridData } = req.body;
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user)
+      return res.status(404).json({ message: "Usuário não encontrado!" });
+
+    if (!Array.isArray(gridData))
+      return res.status(400).json({
+        message: "Dados inválidos: gridData deve ser uma lista de objetos.",
+      });
+
+    user.myGrid = gridData.map((item) => {
+      return {
+        period: item.period,
+        subjects: item.subjects,
+      };
+    });
+
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao atualizar as matérias", error });
+  }
+}
+
+module.exports = {
+  getUser,
+  updateUser,
+  updatePassword,
+  updateSubject,
+  updateMyGrid,
+};

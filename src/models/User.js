@@ -29,6 +29,31 @@ const User = mongoose.model("User", {
       ],
     },
   ],
+  myGrid: [
+    {
+      period: Number,
+      subjects: [
+        {
+          codigo: String,
+          nome: String,
+          ementa: String,
+          credito: Number,
+          prof: String,
+          sala: String,
+          preReq: String,
+          hora: {
+            hora1: { dia: String, inicio: String, fim: String },
+            hora2: { dia: String, inicio: String, fim: String },
+            hora3: { dia: String, inicio: String, fim: String },
+          },
+          nota: String,
+          status: String,
+          cargaHor: Number,
+          periodo: String,
+        },
+      ],
+    },
+  ],
 });
 
 module.exports = User;

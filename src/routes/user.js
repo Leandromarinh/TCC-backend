@@ -12,5 +12,6 @@ router.put(
   authenticate,
   UserController.updateSubject
 );
+router.put("/update/:id/myGrid", authenticate, UserController.updateMyGrid);
 
 module.exports = router;
