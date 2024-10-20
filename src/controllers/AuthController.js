@@ -13,8 +13,6 @@ async function register(req, res) {
 
   const UserExists = await User.findOne({ email: email });
 
-  // console.log("subjects:", subjects);
-
   if (UserExists) return res.status(422).json({ msg: "Email já cadastrado" });
 
   const salt = await bcrypt.genSalt(12);
@@ -26,6 +24,7 @@ async function register(req, res) {
     password: passwordHash,
     period,
     subject,
+    myGrid: [{ period: 1, subjects: [] }],
   });
 
   try {

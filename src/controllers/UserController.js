@@ -78,8 +78,10 @@ async function updateSubject(req, res) {
   try {
     const user = await User.findOne({
       _id: id,
-      "subject.period": period,
-      "subject.subjects._id": subjectId,
+      $or: [
+        { "subject.period": period, "subject.subjects._id": subjectId },
+        { "myGrid.subjects._id": subjectId },
+      ],
     });
 
     if (!user) {
@@ -89,8 +91,10 @@ async function updateSubject(req, res) {
     const subjectPeriod = user.subject.find((s) => s.period === period);
     const subject = subjectPeriod.subjects.id(subjectId);
 
-    Object.assign(subject, newSubject);
-    subject._id = subjectId;
+    if (subject) {
+      Object.assign(subject, newSubject);
+      subject._id = subjectId;
+    }
 
     user.myGrid.forEach((gridPeriod) => {
       const gridSubject = gridPeriod.subjects.find(
