@@ -65,8 +65,8 @@ const period1 = {
       sala: "H209",
       preReq: "",
       hora: {
-        hora1: { dia: "TER", inicio: "13:00", fim: "17:00" },
-        hora2: { dia: "QUI", inicio: "13:00", fim: "17:00" },
+        hora1: { dia: "TER", inicio: "13:00", fim: "15:00" },
+        hora2: { dia: "QUI", inicio: "13:00", fim: "15:00" },
         hora3: { dia: "", inicio: "", fim: "" },
       },
       nota: "",

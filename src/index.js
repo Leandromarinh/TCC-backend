@@ -9,6 +9,7 @@ const UserRoute = require("./routes/user");
 const dbUser = process.env.DB_USER;
 const dbPass = process.env.DB_PASS;
 const PORT = process.env.PORT || 3200;
+const origin = process.env.ORIGIN;
 
 mongoose
   .connect(
@@ -24,7 +25,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000", // ou '*' para permitir todas as origens
+    origin: `${origin}`,
   })
 );
 
