@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-env
+data:
+  db_user: "leui"
+  db_pass: "KwpZzw9O1o29TwhZ"
+  secret: "FKODPFKJPFKJPDFJKIDSJFDIOSJFIDSDS5625145961D96S4D1S984D1S98123131ESAsdsdsdaswdeeffr"
+  refresh_secret: "KDSOKDkKsoskdskdoskdskdksodksokd02023902392932okdlsdlsclsmcknKJDKSJDKSJDKSDKSJDSIBJHJ"
+  port: "8080"
+  origin: "frontend.service.default"
