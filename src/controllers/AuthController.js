@@ -66,11 +66,8 @@ async function login(req, res) {
 
     const tokenExpirationTime = Math.floor(Date.now() / 1000) + 7200;
 
-    // const userInfo = await User.findById(user._id, "-password");
-
     res.status(200).json({
       id: user._id,
-      // user: userInfo,
       token,
       refresh_token,
       token_expiry_time: tokenExpirationTime,

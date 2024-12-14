@@ -13,7 +13,7 @@ const origin = process.env.ORIGIN;
 
 mongoose
   .connect(
-    `mongodb+srv://${dbUser}:${dbPass}@tcc-mongo-dev.q76kj.mongodb.net/?retryWrites=true&w=majority&appName=tcc-mongo-dev`
+    `mongodb://${dbUser}:${dbPass}@docdb-tcc.cluster-covg2ow5gv7z.us-east-1.docdb.amazonaws.com:27017/?tls=true&tlsCAFile=global-bundle.pem&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false`
   )
   .then(() => {
     console.log("Conectou ao banco!");

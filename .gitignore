@@ -1,3 +1,4 @@
 /node_modules
 .env
 /k8s/backend-env.yaml
+/k8s/backend-env-prod.yaml
