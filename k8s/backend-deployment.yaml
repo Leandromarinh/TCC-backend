@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: leui/tcc-backend:1def740b5b1b9523bcbc698451295d5b31127f73
+          image: leui/tcc-backend:0db77bae8e61948cdbfb6da54446133e64ea9d7d
           env:
             - name: DB_USER
               valueFrom:
@@ -46,6 +46,16 @@ spec:
                 configMapKeyRef:
                   name: backend-env
                   key: origin
+            - name: CERT_PATH
+                value: "/etc/certs/global-bundle.pem"
+              volumeMounts:
+                - name: documentdb-cert
+                  mountPath: "/etc/certs"
+                  readOnly: true
+      volumes:
+        - name: documentdb-cert
+          configMap:
+            name: documentdb-cert   
       nodeSelector:
         app: backend
       topologySpreadConstraints:

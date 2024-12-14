@@ -11,12 +11,12 @@ const dbUser = process.env.DB_USER;
 const dbPass = process.env.DB_PASS;
 const PORT = process.env.PORT || 3200;
 const origin = process.env.ORIGIN;
-const cert = process.env.CERT
+const certPath = process.env.CERT_PATH;
 
 const options = {
   ssl: true,
   sslValidate: true,
-  sslCA: fs.readFileSync(cert),
+  sslCA: fs.readFileSync(certPath),
 };
 
 mongoose
