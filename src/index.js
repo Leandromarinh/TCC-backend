@@ -14,10 +14,10 @@ const origin = process.env.ORIGIN;
 const certPath = process.env.CERT_PATH;
 
 const options = {
-  ssl: true,
-  sslValidate: true,
-  sslCA: fs.readFileSync(certPath),
+  tls: true, 
+  tlsCAFile: certPath,
 };
+
 
 mongoose
   .connect(
