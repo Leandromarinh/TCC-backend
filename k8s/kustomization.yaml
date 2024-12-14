@@ -7,4 +7,4 @@ namespace: backend
 images:
 - name: backend
   newName: leui/tcc-backend
-  newTag: fa2d8bdaa096b1b841cae3db29cc0a2b7821d72b
+  newTag: 1def740b5b1b9523bcbc698451295d5b31127f73
