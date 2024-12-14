@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend-deployment
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: backend
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: backend
+          image: leui/tcc-backend:1def740b5b1b9523bcbc698451295d5b31127f73
           env:
             - name: DB_USER
               valueFrom:
@@ -46,3 +46,12 @@ spec:
                 configMapKeyRef:
                   name: backend-env
                   key: origin
+      nodeSelector:
+        app: backend
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: backend
