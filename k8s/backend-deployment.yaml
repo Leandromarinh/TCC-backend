@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: leui/tcc-backend:8104fb7bf980d809b3e85c68b78a50a38c71fdb2
+          image: leui/tcc-backend:0e82f028600e6cec9fe42552e3a8884526657a1d
           env:
             - name: DB_USER
               valueFrom:

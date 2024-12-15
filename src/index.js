@@ -14,10 +14,9 @@ const origin = process.env.ORIGIN;
 const certPath = process.env.CERT_PATH;
 
 const options = {
-  tls: true, 
+  tls: true,
   tlsCAFile: certPath,
 };
-
 
 mongoose
   .connect(
@@ -28,6 +27,8 @@ mongoose
     console.log("Conectou ao banco!");
   })
   .catch((err) => console.log(err));
+
+mongoose.set("debug", true);
 
 const app = express();
 
