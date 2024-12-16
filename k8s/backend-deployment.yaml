@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: backend
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+          env:
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-env
+                  key: db_user
+            - name: DB_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-env
+                  key: db_pass
+            - name: SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-env
+                  key: secret
+            - name: REFRESH_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-env
+                  key: refresh_secret
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-env
+                  key: port
+            - name: ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-env
+                  key: origin
+            - name: CERT_PATH
+              value: "/etc/certs/global-bundle.pem"
+          volumeMounts:
+            - name: documentdb-cert
+              mountPath: "/etc/certs"
+              readOnly: true
+      volumes:
+        - name: documentdb-cert
+          configMap:
+            name: documentdb-cert
+      nodeSelector:
+        app: backend
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "topology.kubernetes.io/zone"
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: backend
