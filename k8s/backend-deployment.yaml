@@ -14,7 +14,14 @@ spec:
     spec:
       containers:
         - name: backend
-          image: leui/tcc-backend:0e82f028600e6cec9fe42552e3a8884526657a1d
+          image: backend
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
           env:
             - name: DB_USER
               valueFrom:
@@ -60,7 +67,7 @@ spec:
         app: backend
       topologySpreadConstraints:
         - maxSkew: 1
-          topologyKey: zone
+          topologyKey: "topology.kubernetes.io/zone"
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
